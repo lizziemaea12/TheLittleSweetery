@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model BookingRequest {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  eventDate  DateTime
+  eventType  String
+  guestCount Int
+  notes      String?
+  createdAt  DateTime @default(now())
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  name      String
+  stars     Int
+  comment   String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
