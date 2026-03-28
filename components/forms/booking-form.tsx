@@ -55,7 +55,7 @@ export function BookingForm() {
       setSuccess("Thanks! Your booking request was sent.");
       setForm(initialState);
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("Something went wrong. Please try again or reach out to us directly at lizziemaea12@gmail.com.");
     } finally {
       setSubmitting(false);
     }
