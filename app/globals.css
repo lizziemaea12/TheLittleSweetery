@@ -3,7 +3,13 @@
 @tailwind utilities;
 
 body {
-  background: #ffffff;
-  color: #171717;
-  font-family: Arial, Helvetica, sans-serif;
+  background: #f8f3ec;
+  color: #5f3b2f;
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), Arial, Helvetica, sans-serif;
 }
