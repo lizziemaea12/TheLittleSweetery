@@ -19,7 +19,7 @@ export function SiteHeader() {
           <Link href="/ratings" className="hover:text-lavender">
             Ratings
           </Link>
-          <Link href="/admin" className="hover:text-lavender">
+          <Link href="/admin" prefetch={false} className="hover:text-lavender">
             Admin
           </Link>
         </div>
