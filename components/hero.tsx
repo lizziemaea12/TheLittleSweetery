@@ -11,12 +11,20 @@ export function Hero() {
         We serve handcrafted cake pops, caramel corn, puppy chow, and rotating seasonal specials
         for celebrations of all sizes.
       </p>
-      <Link
-        href="/book"
-        className="mt-4 inline-block rounded-full bg-lavender px-5 py-2 font-semibold text-white transition hover:bg-accentTeal"
-      >
-        Book The Little Sweetery
-      </Link>
+      <div className="mt-4 flex flex-wrap gap-3">
+        <Link
+          href="/order"
+          className="inline-block rounded-full bg-caramel px-6 py-2 font-bold text-white shadow-lg shadow-caramel/20 transition hover:bg-chocolate"
+        >
+          Order Treats
+        </Link>
+        <Link
+          href="/book"
+          className="inline-block rounded-full bg-lavender px-6 py-2 font-bold text-white shadow-lg shadow-lavender/20 transition hover:bg-oliveGray"
+        >
+          Book An Event
+        </Link>
+      </div>
     </section>
   );
 }

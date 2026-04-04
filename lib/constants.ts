@@ -22,6 +22,11 @@ export const TREATS = [
     description: "Chocolatey cereal mix dusted with powdered sugar.",
   },
   {
+    key: "snickerdoodles",
+    name: "Snickerdoodles",
+    description: "Classic soft and chewy cinnamon sugar cookies.",
+  },
+  {
     key: "seasonal-specials",
     name: "Seasonal Specials",
     description: "Availability varies by event and time of year.",
