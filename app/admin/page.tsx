@@ -18,45 +18,28 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminPage() {
-  let pendingRatings: Awaited<ReturnType<typeof prisma.rating.findMany>> = [];
-  let bookings: Awaited<ReturnType<typeof prisma.bookingRequest.findMany>> = [];
-  let products: Awaited<ReturnType<typeof prisma.product.findMany>> = [];
-  let orders: Awaited<
-    ReturnType<
-      typeof prisma.order.findMany<{
-        include: { items: { include: { product: { select: { name: true } } } } };
-      }>
-    >
-  > = [];
-
-  try {
-    const [ratingsRes, bookingsRes, productsRes, ordersRes] = await Promise.all([
-      prisma.rating.findMany({
-        where: { approved: false },
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.bookingRequest.findMany({
-        orderBy: { eventDate: "asc" },
-      }),
-      prisma.product.findMany({
-        orderBy: { name: "asc" },
-      }),
-      prisma.order.findMany({
-        include: {
-          items: {
-            include: { product: { select: { name: true } } }
-          }
-        },
-        orderBy: { createdAt: "desc" },
-      }),
-    ]);
-    pendingRatings = ratingsRes;
-    bookings = bookingsRes;
-    products = productsRes;
-    orders = ordersRes;
-  } catch {
-    // Error logged or handled via empty arrays
-  }
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const [pendingRatings, bookings, products, orders] = (await Promise.all([
+    prisma.rating.findMany({
+      where: { approved: false },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.bookingRequest.findMany({
+      orderBy: { eventDate: "asc" },
+    }),
+    prisma.product.findMany({
+      orderBy: { name: "asc" },
+    }),
+    prisma.order.findMany({
+      include: {
+        items: {
+          include: { product: { select: { name: true } } }
+        }
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]).catch(() => [[], [], [], []])) as any;
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   return (
     <div className="space-y-8">

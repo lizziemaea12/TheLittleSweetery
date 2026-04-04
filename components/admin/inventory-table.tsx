@@ -26,10 +26,10 @@ export function InventoryTable({ initialProducts }: { initialProducts: Product[]
 
       if (response.ok) {
         const data = await response.json();
-        setProducts(prev => prev.map(p => p.id === id ? data.product : p));
+        setProducts(prev => prev.map((p: Product) => p.id === id ? data.product : p));
         setEditingId(null);
       }
-    } catch (error) {
+    } catch {
       alert("Failed to update stock");
     } finally {
       setSaving(false);
@@ -51,7 +51,7 @@ export function InventoryTable({ initialProducts }: { initialProducts: Product[]
           </tr>
         </thead>
         <tbody className="divide-y divide-oliveGray/10">
-          {products.map(p => (
+          {products.map((p: Product) => (
             <tr key={p.id} className="hover:bg-cream/5 transition-colors">
               <td className="px-6 py-4 font-semibold text-chocolate">{p.name}</td>
               <td className="px-6 py-4 text-caramel font-bold">${p.price.toFixed(2)}</td>

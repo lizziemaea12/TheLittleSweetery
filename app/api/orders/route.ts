@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' }
     });
     return NextResponse.json({ orders });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
   }
 }
@@ -107,8 +107,9 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ order: newOrder }, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
     console.error("Order error:", error);
-    return NextResponse.json({ error: "Failed to place order: " + error.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to place order: " + message }, { status: 500 });
   }
 }

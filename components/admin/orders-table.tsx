@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { format } from "date-fns";
 
 type OrderItem = {
@@ -21,9 +20,7 @@ type Order = {
 };
 
 export function OrdersTable({ initialOrders }: { initialOrders: Order[] }) {
-  const [orders, setOrders] = useState(initialOrders);
-
-  if (orders.length === 0) return (
+  if (initialOrders.length === 0) return (
     <div className="bg-cream/10 rounded-2xl p-8 border border-chocolate/10 text-chocolate/50 font-bold text-center italic shadow-inner">
       No orders yet. They&apos;ll show up here!
     </div>
@@ -35,7 +32,7 @@ export function OrdersTable({ initialOrders }: { initialOrders: Order[] }) {
         <h2 className="text-xl font-bold text-chocolate italic">Recent Orders</h2>
       </div>
       <div className="divide-y divide-oliveGray/10">
-        {orders.map(o => (
+        {initialOrders.map((o: Order) => (
           <div key={o.id} className="p-6 hover:bg-cream/5 transition-colors group">
             <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
               <div className="space-y-1">
@@ -53,7 +50,7 @@ export function OrdersTable({ initialOrders }: { initialOrders: Order[] }) {
 
               <div className="flex-1 w-full md:w-auto overflow-hidden">
                 <div className="flex flex-wrap gap-2">
-                  {o.items.map(i => (
+                  {o.items.map((i: OrderItem) => (
                     <span key={i.id} className="inline-flex items-center gap-1 bg-cream/50 border border-oliveGray/10 px-2 py-1 rounded-lg text-xs font-semibold text-chocolate/80">
                       <span className="text-caramel font-bold">{i.quantity}x</span>
                       <span>{i.product.name}</span>

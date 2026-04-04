@@ -10,7 +10,7 @@ export async function GET() {
       orderBy: { name: 'asc' }
     });
     return NextResponse.json({ products });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
   }
 }
@@ -30,7 +30,7 @@ export async function PATCH(request: NextRequest) {
     });
 
     return NextResponse.json({ product: updatedProduct });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to update stock" }, { status: 500 });
   }
 }

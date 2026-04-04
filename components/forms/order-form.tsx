@@ -9,11 +9,6 @@ type Product = {
   stockQuantity: number;
 };
 
-type OrderItem = {
-  productId: string;
-  quantity: number;
-};
-
 export function OrderForm() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +66,7 @@ export function OrderForm() {
     setSuccess(null);
 
     const items = Object.entries(orderItems)
-      .filter(([_, qty]) => qty > 0)
+      .filter(([, qty]) => qty > 0)
       .map(([id, qty]) => ({ productId: id, quantity: qty }));
 
     if (!customerName || !customerEmail || items.length === 0) {
@@ -144,7 +139,7 @@ export function OrderForm() {
 
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-oliveGray border-b border-oliveGray/10 pb-2">Our Treats</h3>
-          {products.map(product => (
+          {products.map((product: Product) => (
             <div key={product.id} className="flex items-center justify-between p-4 rounded-2xl bg-cream/20 border border-cream/50 hover:border-lavender/30 transition-all group">
               <div className="flex-1">
                 <h4 className="font-bold text-chocolate text-lg group-hover:text-lavender transition-colors">{product.name}</h4>
