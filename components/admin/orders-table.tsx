@@ -25,7 +25,7 @@ export function OrdersTable({ initialOrders }: { initialOrders: Order[] }) {
 
   if (orders.length === 0) return (
     <div className="bg-cream/10 rounded-2xl p-8 border border-chocolate/10 text-chocolate/50 font-bold text-center italic shadow-inner">
-      No orders yet. They'll show up here!
+      No orders yet. They&apos;ll show up here!
     </div>
   );
 

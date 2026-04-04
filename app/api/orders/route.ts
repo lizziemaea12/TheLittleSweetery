@@ -24,9 +24,20 @@ export async function GET(request: NextRequest) {
   }
 }
 
+interface OrderItemInput {
+  productId: string;
+  quantity: number;
+}
+
+interface OrderInput {
+  customerName: string;
+  customerEmail: string;
+  items: OrderItemInput[];
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body: OrderInput = await request.json();
     const { customerName, customerEmail, items } = body;
 
     if (!customerEmail || !customerName || !items || !Array.isArray(items) || items.length === 0) {
@@ -34,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 1: Check inventory and calculate total price
-    const productIds = items.map((i: any) => i.productId);
+    const productIds = items.map((i: OrderItemInput) => i.productId);
     const dbProducts = await prisma.product.findMany({
       where: { id: { in: productIds } }
     });

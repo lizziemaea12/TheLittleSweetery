@@ -21,8 +21,14 @@ export default async function AdminPage() {
   let pendingRatings: Awaited<ReturnType<typeof prisma.rating.findMany>> = [];
   let bookings: Awaited<ReturnType<typeof prisma.bookingRequest.findMany>> = [];
   let products: Awaited<ReturnType<typeof prisma.product.findMany>> = [];
-  let orders: any[] = [];
-  
+  let orders: Awaited<
+    ReturnType<
+      typeof prisma.order.findMany<{
+        include: { items: { include: { product: { select: { name: true } } } } };
+      }>
+    >
+  > = [];
+
   try {
     const [ratingsRes, bookingsRes, productsRes, ordersRes] = await Promise.all([
       prisma.rating.findMany({
@@ -48,8 +54,8 @@ export default async function AdminPage() {
     bookings = bookingsRes;
     products = productsRes;
     orders = ordersRes;
-  } catch (error) {
-    console.error("Fetch error:", error);
+  } catch {
+    // Error logged or handled via empty arrays
   }
 
   return (

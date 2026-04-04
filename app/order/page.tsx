@@ -21,7 +21,7 @@ export default function OrderPage() {
         
         <div className="text-center text-chocolate/50 text-sm italic">
           <p>Orders are typically ready within 24 hours.</p>
-          <p>We'll email you for pickup details!</p>
+          <p>We&apos;ll email you for pickup details!</p>
         </div>
       </div>
     </main>
