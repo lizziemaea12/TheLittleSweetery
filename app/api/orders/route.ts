@@ -35,6 +35,12 @@ interface OrderInput {
   items: OrderItemInput[];
 }
 
+interface OrderItemCreate {
+  productId: string;
+  quantity: number;
+  price: number;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body: OrderInput = await request.json();
@@ -49,12 +55,14 @@ export async function POST(request: NextRequest) {
     const dbProducts = await prisma.product.findMany({
       where: { id: { in: productIds } }
     });
-
-    const productMap = new Map();
+    
+    // Explicitly type the product map to avoid implicit any
+    type ProductType = (typeof dbProducts)[0];
+    const productMap = new Map<string, ProductType>();
     dbProducts.forEach(p => productMap.set(p.id, p));
 
     let totalPrice = 0;
-    const itemsToCreate = [];
+    const itemsToCreate: OrderItemCreate[] = [];
 
     for (const item of items) {
       const dbProduct = productMap.get(item.productId);
