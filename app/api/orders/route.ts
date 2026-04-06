@@ -24,6 +24,31 @@ export async function GET(request: NextRequest) {
   }
 }
 
+export async function PATCH(request: NextRequest) {
+  if (!isAdminAuthorized(request)) {
+    return unauthorizedAdminResponse();
+  }
+
+  try {
+    const body = await request.json();
+    const { id, status } = body;
+
+    if (!id || !status) {
+      return NextResponse.json({ error: "Order ID and status are required" }, { status: 400 });
+    }
+
+    const updatedOrder = await prisma.order.update({
+      where: { id },
+      data: { status },
+    });
+
+    return NextResponse.json({ order: updatedOrder });
+  } catch (error) {
+    console.error("Order update error:", error);
+    return NextResponse.json({ error: "Failed to update order" }, { status: 500 });
+  }
+}
+
 interface OrderItemInput {
   productId: string;
   quantity: number;
@@ -33,6 +58,9 @@ interface OrderInput {
   customerName: string;
   customerEmail: string;
   items: OrderItemInput[];
+  pickupDate?: string;
+  meetingDetails?: string;
+  paymentDetails?: string;
 }
 
 interface OrderItemCreate {
@@ -44,13 +72,24 @@ interface OrderItemCreate {
 export async function POST(request: NextRequest) {
   try {
     const body: OrderInput = await request.json();
-    const { customerName, customerEmail, items } = body;
+    const { 
+      customerName, 
+      customerEmail, 
+      items, 
+      pickupDate, 
+      meetingDetails, 
+      paymentDetails 
+    } = body;
 
     if (!customerEmail || !customerName || !items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: "Invalid order data" }, { status: 400 });
     }
 
-    // Step 1: Check inventory and calculate total price
+    // Check inventory mode
+    const settings = await prisma.globalSetting.findUnique({ where: { id: "settings" } });
+    const inventoryMode = settings?.inventoryMode ?? true;
+
+    // Step 1: Check inventory (if in inventory mode) and calculate total price
     const productIds = items.map((i: OrderItemInput) => i.productId);
     const dbProducts = await prisma.product.findMany({
       where: { id: { in: productIds } }
@@ -70,7 +109,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: `Product not found: ${item.productId}` }, { status: 404 });
       }
 
-      if (dbProduct.stockQuantity < item.quantity) {
+      if (inventoryMode && dbProduct.stockQuantity < item.quantity) {
         return NextResponse.json({ 
           error: `Not enough stock for ${dbProduct.name}. Only ${dbProduct.stockQuantity} left.` 
         }, { status: 400 });
@@ -92,6 +131,9 @@ export async function POST(request: NextRequest) {
           customerName,
           customerEmail,
           totalPrice,
+          pickupDate: pickupDate ? new Date(pickupDate) : null,
+          meetingDetails,
+          paymentDetails,
           items: {
             create: itemsToCreate
           }
@@ -99,16 +141,18 @@ export async function POST(request: NextRequest) {
         include: { items: true }
       });
 
-      // 2. Update inventory
-      for (const item of items) {
-        await tx.product.update({
-          where: { id: item.productId },
-          data: {
-            stockQuantity: {
-              decrement: item.quantity
+      // 2. Update inventory (if in inventory mode)
+      if (inventoryMode) {
+        for (const item of items) {
+          await tx.product.update({
+            where: { id: item.productId },
+            data: {
+              stockQuantity: {
+                decrement: item.quantity
+              }
             }
-          }
-        });
+          });
+        }
       }
 
       return order;

@@ -9,14 +9,16 @@ datasource db {
 }
 
 model BookingRequest {
-  id         String   @id @default(cuid())
-  name       String
-  email      String
-  eventDate  DateTime
-  eventType  String
-  guestCount Int
-  notes      String?
-  createdAt  DateTime @default(now())
+  id             String   @id @default(cuid())
+  name           String
+  email          String
+  eventDate      DateTime
+  eventAddress   String?  @default("")
+  eventType      String
+  guestCount     Int
+  estimatedPrice Float    @default(0)
+  notes          String?
+  createdAt      DateTime @default(now())
 }
 
 model Rating {
@@ -38,13 +40,21 @@ model Product {
 }
 
 model Order {
-  id            String      @id @default(cuid())
-  customerName  String
-  customerEmail String
-  totalPrice    Float
-  status        String      @default("PENDING") // PENDING, READY, COMPLETED, CANCELLED
-  items         OrderItem[]
-  createdAt     DateTime    @default(now())
+  id             String      @id @default(cuid())
+  customerName   String
+  customerEmail  String
+  totalPrice     Float
+  status         String      @default("PENDING") // PENDING, READY, COMPLETED, CANCELLED
+  items          OrderItem[]
+  pickupDate     DateTime?
+  meetingDetails String?
+  paymentDetails String?
+  createdAt      DateTime    @default(now())
+}
+
+model GlobalSetting {
+  id            String  @id @default("settings")
+  inventoryMode Boolean @default(true)
 }
 
 model OrderItem {
