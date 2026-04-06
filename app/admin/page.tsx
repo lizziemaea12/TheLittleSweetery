@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { AdminLoginGate } from "@/components/admin/admin-login-gate";
@@ -20,8 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminPage() {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const [pendingRatings, bookings, products, orders, settings] = (await Promise.all([
+  const result = await Promise.all([
     prisma.rating.findMany({
       where: { approved: false },
       orderBy: { createdAt: "desc" },
@@ -43,8 +43,9 @@ export default async function AdminPage() {
     prisma.globalSetting.findUnique({
       where: { id: "settings" },
     }).then((s: any) => s ?? { inventoryMode: true }),
-  ]).catch(() => [[], [], [], [], { inventoryMode: true }])) as any;
-  /* eslint-enable @typescript-eslint/no-explicit-any */
+  ]).catch(() => [[], [], [], [], { inventoryMode: true }]);
+
+  const [pendingRatings, bookings, products, orders, settings] = result as any[];
 
   return (
     <div className="space-y-12 pb-24">

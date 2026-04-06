@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import { format, addDays } from "date-fns";
+import Image from "next/image";
 
 type Product = {
   id: string;
@@ -152,13 +153,21 @@ export function OrderForm() {
           <h3 className="font-bold text-chocolate text-xl italic underline decoration-lavender/30 decoration-4 underline-offset-4">Payment Information</h3>
           <p className="text-sm text-chocolate/70">Please complete your payment of <span className="text-caramel font-black text-lg">${orderDetails.totalPrice.toFixed(2)}</span> using Venmo below:</p>
 
-          <div className="aspect-square w-full max-w-[280px] mx-auto bg-white rounded-3xl border-2 border-dashed border-lavender/30 flex flex-col items-center justify-center gap-4 group transition-all hover:border-lavender/60">
-            <img className="w-full h-full object-cover" src="https://dqsuyyndpkghdgbudmmx.supabase.co/storage/v1/object/public/images/mom_venmo.png" alt="Venmo QR Code" />
-            <div className="p-4 text-center">
-              <span className="text-3xl grayscale group-hover:grayscale-0 transition-all">📱</span>
-              <p className="text-xs font-bold text-chocolate/40 uppercase tracking-tighter mt-2">Venmo QR Code Space</p>
-              <p className="text-[10px] text-chocolate/30 italic">@Stacy-Adamission</p>
+          <div className="aspect-square w-full max-w-[280px] mx-auto bg-white rounded-3xl border-2 border-dashed border-lavender/30 overflow-hidden group transition-all hover:border-lavender/60 relative">
+            <Image 
+              className="object-cover" 
+              src="https://dqsuyyndpkghdgbudmmx.supabase.co/storage/v1/object/public/images/mom_venmo.png" 
+              alt="Venmo QR Code" 
+              fill
+            />
+            <div className="absolute inset-0 bg-white/20 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+               <span className="bg-white/90 text-lavender font-black px-4 py-2 rounded-full shadow-lg text-xs uppercase tracking-widest">Scan Me</span>
             </div>
+          </div>
+          <div className="p-4 text-center">
+            <span className="text-3xl grayscale group-hover:grayscale-0 transition-all">📱</span>
+            <p className="text-xs font-bold text-chocolate/40 uppercase tracking-tighter mt-2">Venmo QR Code Space</p>
+            <p className="text-[10px] text-chocolate/30 italic">@Stacy-Adamission</p>
           </div>
 
           <p className="text-[10px] text-chocolate/50 italic px-6">Scan the code above or search for our Venmo handle to complete your purchase. Your order will be processed once payment is confirmed!</p>
