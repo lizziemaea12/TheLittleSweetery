@@ -1,3 +1,4 @@
+/* Verified Admin Updates: Inventory Mode and Order Statuses */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
