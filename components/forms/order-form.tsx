@@ -15,13 +15,31 @@ type GlobalSettings = {
   inventoryMode: boolean;
 };
 
+type Order = {
+  id: string;
+  customerName: string;
+  customerEmail: string;
+  totalPrice: number;
+  status: string;
+  createdAt: string;
+  items: { 
+    id: string; 
+    quantity: number; 
+    price: number; 
+    productId: string; 
+  }[];
+  pickupDate?: string | null;
+  meetingDetails?: string | null;
+  paymentDetails?: string | null;
+};
+
 export function OrderForm() {
   const [products, setProducts] = useState<Product[]>([]);
   const [settings, setSettings] = useState<GlobalSettings>({ inventoryMode: true });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
-  const [orderDetails, setOrderDetails] = useState<any>(null);
+  const [orderDetails, setOrderDetails] = useState<Order | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const [customerName, setCustomerName] = useState("");

@@ -1,5 +1,4 @@
 /* Verified Admin Updates: Inventory Mode and Order Statuses */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { AdminLoginGate } from "@/components/admin/admin-login-gate";
@@ -43,10 +42,10 @@ export default async function AdminPage() {
     }),
     prisma.globalSetting.findUnique({
       where: { id: "settings" },
-    }).then((s: any) => s ?? { inventoryMode: true }),
-  ]).catch(() => [[], [], [], [], { inventoryMode: true }]);
+    }).then((s) => s ?? { id: "settings", inventoryMode: true }),
+  ]).catch(() => [[], [], [], [], { id: "settings", inventoryMode: true }]);
 
-  const [pendingRatings, bookings, products, orders, settings] = result as any[];
+  const [pendingRatings, bookings, products, orders, settings] = result as [any[], any[], any[], any[], { inventoryMode: boolean }];
 
   return (
     <div className="space-y-12 pb-24">
