@@ -17,9 +17,9 @@ type Order = {
   customerEmail: string;
   totalPrice: number;
   status: string;
-  createdAt: string;
+  createdAt: string | Date;
   items: OrderItem[];
-  pickupDate?: string;
+  pickupDate?: string | Date | null;
   meetingDetails?: string;
   paymentDetails?: string;
 };

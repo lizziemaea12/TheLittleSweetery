@@ -20,6 +20,25 @@ export const metadata: Metadata = {
   },
 };
 
+type Rating = { id: string; name: string; stars: number; comment: string; approved: boolean; createdAt: Date };
+type BookingRequest = { id: string; name: string; email: string; eventDate: Date; eventType: string; guestCount: number; estimatedPrice: number; notes: string | null; createdAt: Date };
+type Product = { id: string; name: string; price: number; stockQuantity: number };
+type OrderWithItems = { 
+  id: string; 
+  customerName: string; 
+  customerEmail: string; 
+  totalPrice: number; 
+  status: string; 
+  createdAt: Date; 
+  items: { 
+    id: string;
+    quantity: number;
+    price: number;
+    product: { name: string } 
+  }[] 
+};
+type GlobalSettings = { id: string; inventoryMode: boolean };
+
 export default async function AdminPage() {
   const result = await Promise.all([
     prisma.rating.findMany({
@@ -45,7 +64,13 @@ export default async function AdminPage() {
     }).then((s) => s ?? { id: "settings", inventoryMode: true }),
   ]).catch(() => [[], [], [], [], { id: "settings", inventoryMode: true }]);
 
-  const [pendingRatings, bookings, products, orders, settings] = result as [any[], any[], any[], any[], { inventoryMode: boolean }];
+  const [pendingRatings, bookings, products, orders, settings] = result as [
+    Rating[],
+    BookingRequest[],
+    Product[],
+    OrderWithItems[],
+    GlobalSettings
+  ];
 
   return (
     <div className="space-y-12 pb-24">
